@@ -1,188 +1,199 @@
-<!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CTX‑REGENERATIVO™ – IA Embutida</title>
+  <meta charset="UTF-8">
+  <title>CTX‑REGENERATIVO – Simulador Bioético</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom right, #f4f4f4, #e0ffe0);
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f0f0;
+      color: #222;
       margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #1f8b4c;
-      color: white;
-      text-align: center;
-      padding: 30px 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
       padding: 20px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      transition: all 0.5s ease;
     }
-    .section {
-      margin-bottom: 30px;
+
+    body.dark {
+      background-color: #121212;
+      color: #eee;
     }
-    h1, h2 {
-      color: #1f8b4c;
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.2);
+      transition: background 0.5s ease;
     }
+
+    body.dark .container {
+      background: #1e1e1e;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #007b00;
+    }
+
     label {
       display: block;
-      margin: 10px 0;
+      margin-top: 15px;
     }
-    button, .btn {
-      padding: 10px 20px;
-      margin: 10px 10px 0 0;
-      border: none;
-      background-color: #1f8b4c;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      margin-top: 5px;
     }
-    button:hover {
-      background-color: #166c3b;
-    }
-    .result {
+
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
       font-weight: bold;
-      font-size: 1.2em;
-      margin-top: 20px;
+      background-color: #007b00;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .ia-response {
-      background: #e7ffe7;
-      border-left: 5px solid #1f8b4c;
+
+    button:hover {
+      background-color: #005d00;
+      transform: scale(1.05);
+    }
+
+    .result, .ia-response {
+      margin-top: 25px;
       padding: 15px;
-      margin-top: 20px;
+      border-radius: 15px;
+      background-color: #eafbe7;
+      transition: all 0.3s ease;
+    }
+
+    .ia-response {
+      background-color: #fffce0;
       font-style: italic;
     }
-    .tooltip {
-      border-bottom: 1px dotted #000;
-      cursor: help;
+
+    details summary {
+      font-weight: bold;
+      cursor: pointer;
     }
+
+    pre {
+      white-space: pre-wrap;
+    }
+
     #historico {
-      margin-top: 15px;
-      background: #f0f0f0;
-      padding: 10px;
-      border-radius: 8px;
-      display: none;
+      margin-top: 30px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>CTX‑REGENERATIVO™</h1>
-    <p>Simulador com IA Embutida – Terapia Epigenética com Base Afrokódica</p>
-  </header>  <div class="container">
-    <div class="section">
-      <h2>Simulador BioAI‑CTX</h2>
-      <label><input type="checkbox" id="il6"> IL‑6 Elevada <span class="tooltip" title="Indica inflamação ativa que pode ativar a terapia.">[?]</span></label>
-      <label><input type="checkbox" id="tnf"> TNF‑α Elevado <span class="tooltip" title="Fator inflamatório que pode justificar edição epigenética.">[?]</span></label>
-      <label><input type="checkbox" id="hbf"> HbF &lt; 5% <span class="tooltip" title="Hemoglobina fetal baixa: sinal de necessidade clínica.">[?]</span></label>
-      <label><input type="checkbox" id="mosaico"> Risco Genético Alto (Mosaico) <span class="tooltip" title="Impede ativação se risco de mutações imprevisíveis estiver elevado.">[?]</span></label>
-      <button onclick="simular()">Executar Simulação</button>
-      <div class="result" id="resultado"></div>
-      <div class="ia-response" id="iaTexto" style="display: none;"></div>
-    </div><div class="section">
-  <button onclick="baixarRelatorio()">📄 Baixar Relatório da Simulação</button>
-  <button onclick="mostrarHistorico()">🧾 Ver Histórico</button>
-  <button onclick="limparHistorico()">🧹 Limpar Histórico</button>
-  <div id="historico"></div>
-</div>
+  <div class="container">
+    <h1>🧬 CTX‑REGENERATIVO – Simulador Bioético</h1>
 
-<div class="section">
-  <h2>Sobre esta Terapia</h2>
-  <p>CTX‑REGENERATIVO™ utiliza lógica BioAI‑CTX e edição epigenética com ativação ética condicional. O tratamento é seguro em presença de inflamação crítica, evitando intervenções desnecessárias e protegendo a integridade genética.</p>
-</div>
+    <label for="idade">Idade do paciente:</label>
+    <input type="number" id="idade" min="0" placeholder="Ex: 45">
 
-<div class="section">
-  <h3>🌐 Idioma / Language / Langue</h3>
-  <button onclick="trocarIdioma('pt')">🇦🇴 Português</button>
-  <button onclick="trocarIdioma('en')">🇬🇧 English</button>
-  <button onclick="trocarIdioma('fr')">🇫🇷 Français</button>
-</div>
+    <label for="danos">Percentual de danos celulares (%):</label>
+    <input type="number" id="danos" min="0" max="100" placeholder="Ex: 35">
 
-  </div>  <footer style="text-align:center; margin-top:40px; color:#555;">
-    Desenvolvido com sabedoria Afrokódica e IA Viva – &copy; 2025 Dala De Carvalho ✊🏽
-  </footer>  <script>
-    const textos = {
-      pt: {
-        titulo: "CTX‑REGENERATIVO™",
-        simular: "Executar Simulação",
-        baixar: "📄 Baixar Relatório da Simulação"
-      },
-      en: {
-        titulo: "CTX‑REGENERATIVE™",
-        simular: "Run Simulation",
-        baixar: "📄 Download Simulation Report"
-      },
-      fr: {
-        titulo: "CTX‑RÉGÉNÉRATIF™",
-        simular: "Exécuter la Simulation",
-        baixar: "📄 Télécharger le Rapport"
-      }
-    };
+    <label for="etica">A ética foi respeitada? (0 = Não, 1 = Sim)</label>
+    <input type="number" id="etica" min="0" max="1" placeholder="Ex: 1">
 
-    function trocarIdioma(idioma) {
-      const lang = textos[idioma];
-      if (!lang) return;
-      document.querySelector('h1').textContent = lang.titulo;
-      document.querySelectorAll('button')[0].textContent = lang.simular;
-      document.querySelectorAll('button')[1].textContent = lang.baixar;
-    }
+    <button onclick="simular()">▶️ Executar Simulação</button>
+    <button onclick="iniciarVoz()">🎙️ Ativar Voz</button>
+    <button onclick="baixarRelatorio()">📄 Baixar Relatório</button>
+    <button onclick="mostrarHistorico()">🧾 Ver Histórico</button>
+    <button onclick="alternarModo()">🌓 Alternar Modo</button>
 
+    <div class="result" id="resultado"></div>
+    <div class="ia-response" id="iaTexto"></div>
+    <div id="historico"></div>
+  </div>
+
+  <script>
     function simular() {
-      const il6 = document.getElementById('il6').checked;
-      const tnf = document.getElementById('tnf').checked;
-      const hbf = document.getElementById('hbf').checked;
-      const mosaico = document.getElementById('mosaico').checked;
-      const ativar = il6 && tnf && hbf && !mosaico;
+      const idade = parseInt(document.getElementById('idade').value);
+      const danos = parseInt(document.getElementById('danos').value);
+      const etica = parseInt(document.getElementById('etica').value);
+      const resultadoDiv = document.getElementById('resultado');
+      const iaTextoDiv = document.getElementById('iaTexto');
 
-      const resultado = document.getElementById('resultado');
-      const iaTexto = document.getElementById('iaTexto');
-      resultado.style.color = ativar ? 'green' : 'red';
-      resultado.textContent = ativar
-        ? '✅ Terapia Ativada: Edição Epigenética ON'
-        : '⛔ Terapia Bloqueada: Condições Não Ideais';
+      if (isNaN(idade) || isNaN(danos) || isNaN(etica)) {
+        resultadoDiv.innerHTML = "⚠️ Por favor, preencha todos os campos corretamente.";
+        return;
+      }
 
-      iaTexto.innerHTML = ativar
-        ? "🧠 <strong>IA DALA.CTX:</strong> Condições críticas detectadas. Ativação segura recomendada."
-        : "⚠️ <strong>IA DALA.CTX:</strong> Terapia bloqueada. Parâmetros bioéticos não atendidos.";
+      let resultado = "";
+      let iaTexto = "";
 
-      iaTexto.style.display = "block";
-      salvarHistorico(resultado.textContent + "\n" + iaTexto.textContent);
+      if (danos > 70 || idade > 80) {
+        resultado = "🚨 Paciente não elegível para terapia regenerativa. Risco elevado detectado.";
+        iaTexto = "IA DALA.CTX: Recomendo cuidados paliativos personalizados. O respeito pela dignidade humana é prioridade. 🕊️";
+      } else if (etica === 0) {
+        resultado = "⚠️ A simulação foi interrompida por violação do protocolo bioético.";
+        iaTexto = "IA DALA.CTX: O progresso sem ética é regressão. O sistema será encerrado automaticamente. ⛔";
+      } else {
+        resultado = "✅ Terapia CTX-Regenerativa aprovada com sucesso!";
+        iaTexto = "IA DALA.CTX: Parâmetros seguros. Iniciando protocolo de restauração celular e reativação neural. 🌱✨";
+      }
+
+      resultadoDiv.innerHTML = resultado;
+      iaTextoDiv.innerHTML = iaTexto;
+
+      const historico = localStorage.getItem("historico") || "";
+      const novo = `Idade: ${idade} | Danos: ${danos}% | Ética: ${etica} ➤ ${resultado}\n${iaTexto}\n---\n`;
+      localStorage.setItem("historico", historico + novo);
     }
 
     function baixarRelatorio() {
-      const texto = document.getElementById('resultado').textContent + "\n" +
+      const texto = "🧬 Relatório CTX‑REGENERATIVO\n\n" +
+        document.getElementById('resultado').textContent + "\n" +
         document.getElementById('iaTexto').textContent;
-      const blob = new Blob(["Relatório CTX‑REGENERATIVO\n\n" + texto], { type: "text/plain;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "Relatorio_CTX_REGENERATIVO.txt";
-      link.click();
-    }
 
-    function salvarHistorico(dados) {
-      let historico = localStorage.getItem("historico") || "";
-      historico += "\n---\n" + new Date().toLocaleString() + "\n" + dados;
-      localStorage.setItem("historico", historico);
+      const novaJanela = window.open("", "_blank");
+      novaJanela.document.write(`<pre>${texto}</pre>`);
+      novaJanela.print();
     }
 
     function mostrarHistorico() {
-      const historico = localStorage.getItem("historico") || "Sem dados anteriores.";
+      const historico = (localStorage.getItem("historico") || "").split("---");
       const div = document.getElementById("historico");
+      div.innerHTML = historico.map((item, i) => `
+        <details>
+          <summary>🧾 Simulação ${i + 1}</summary>
+          <pre>${item.trim()}</pre>
+        </details>
+      `).join('');
       div.style.display = "block";
-      div.textContent = historico;
     }
 
-    function limparHistorico() {
-      localStorage.removeItem("historico");
-      mostrarHistorico();
+    function alternarModo() {
+      document.body.classList.toggle("dark");
     }
-  </script></body>
+
+    function iniciarVoz() {
+      const reconhecimento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      reconhecimento.lang = "pt-PT";
+      reconhecimento.start();
+
+      reconhecimento.onresult = function(event) {
+        const comando = event.results[0][0].transcript.toLowerCase();
+        if (comando.includes("executar")) simular();
+        else if (comando.includes("histórico")) mostrarHistorico();
+        else alert("🎙️ Comando de voz não reconhecido: " + comando);
+      };
+    }
+  </script>
+</body>
 </html>
