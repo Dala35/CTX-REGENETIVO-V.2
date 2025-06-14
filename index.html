@@ -1,240 +1,109 @@
 <!DOCTYPE html><html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>CTX‑REGENERATIVO – Simulador Bioético</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador BioAI-CTX com Lógica Afrokódica</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      color: #222;
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
       margin: 0;
       padding: 20px;
-      transition: all 0.5s ease;
-    }body.dark {
-  background-color: #121212;
-  color: #eee;
-}
-
-.container {
-  max-width: 700px;
-  margin: auto;
-  background: #fff;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.2);
-}
-
-body.dark .container {
-  background: #1e1e1e;
-}
-
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #007b00;
-}
-
-label {
-  display: block;
-  margin-top: 15px;
-}
-
-input[type="number"] {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #aaa;
-}
-
-button {
-  margin-top: 15px;
-  margin-right: 8px;
-  padding: 10px 16px;
-  background: #007b00;
-  color: #fff;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  background: #005500;
-  transform: scale(1.05);
-}
-
-.result, .ia-response {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #eafbe7;
-}
-
-.ia-response {
-  background-color: #fffce0;
-  font-style: italic;
-}
-
-#historico {
-  margin-top: 30px;
-}
-
-details summary {
-  cursor: pointer;
-  font-weight: bold;
-}
-
+      color: #333;
+    }
+    h1 {
+      color: #a00;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    select, button {
+      margin-top: 5px;
+      padding: 8px;
+      width: 100%;
+    }
+    #resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff4e6;
+      border: 1px solid #ffa726;
+      border-radius: 5px;
+      font-size: 1.1em;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 id="titulo">🧬 CTX‑REGENERATIVO – Simulador Bioético</h1><label id="lblIdade" for="idade">Idade do paciente:</label>
-<input type="number" id="idade" placeholder="Ex: 45">
+  <h1>Simulador BioAI-CTX 🔬 com Lógica Afrokódica 🌍</h1>  <form id="simulador-form">
+    <label for="marcador1">Marcador Biológico 1:</label>
+    <select id="marcador1">
+      <option value="">Selecione</option>
+      <option value="IL-6">IL‑6</option>
+      <option value="TNF">TNF</option>
+      <option value="Cortisol">Cortisol</option>
+      <option value="Adrenalina">Adrenalina</option>
+      <option value="B12">B12</option>
+    </select><label for="marcador2">Marcador Biológico 2:</label>
+<select id="marcador2">
+  <option value="">Selecione</option>
+  <option value="IL-6">IL‑6</option>
+  <option value="TNF">TNF</option>
+  <option value="Cortisol">Cortisol</option>
+  <option value="Adrenalina">Adrenalina</option>
+  <option value="B12">B12</option>
+</select>
 
-<label id="lblDanos" for="danos">Percentual de danos celulares (%):</label>
-<input type="number" id="danos" placeholder="Ex: 35">
+<label for="marcador3">Marcador Biológico 3:</label>
+<select id="marcador3">
+  <option value="">Selecione</option>
+  <option value="IL-6">IL‑6</option>
+  <option value="TNF">TNF</option>
+  <option value="Cortisol">Cortisol</option>
+  <option value="Adrenalina">Adrenalina</option>
+  <option value="B12">B12</option>
+</select>
 
-<label id="lblEtica" for="etica">A ética foi respeitada? (0 = Não, 1 = Sim)</label>
-<input type="number" id="etica" placeholder="Ex: 1">
+<button type="button" onclick="gerarRespostaAfrokodica()">Gerar Resposta Afrokódica</button>
 
-<br>
-<button onclick="simular()" id="btnSimular">▶️ Simular</button>
-<button onclick="iniciarVoz()" id="btnVoz">🎙️ Voz</button>
-<button onclick="mostrarHistorico()" id="btnHistorico">🧾 Histórico</button>
-<button onclick="alternarModo()" id="btnModo">🌓 Modo</button>
-<button onclick="alternarIdioma()" id="btnIdioma">🌐 EN</button>
+  </form>  <div id="resultado"></div>  <script>
+    function gerarRespostaAfrokodica() {
+      const m1 = document.getElementById("marcador1").value;
+      const m2 = document.getElementById("marcador2").value;
+      const m3 = document.getElementById("marcador3").value;
+      const marcadores = [m1, m2, m3].filter(x => x);
 
-<div class="result" id="resultado"></div>
-<div class="ia-response" id="iaTexto"></div>
-<div id="historico"></div>
-
-  </div>  <script>
-    let idioma = 'pt';
-
-    const textos = {
-      pt: {
-        titulo: "🧬 CTX‑REGENERATIVO – Simulador Bioético",
-        lblIdade: "Idade do paciente:",
-        lblDanos: "Percentual de danos celulares (%):",
-        lblEtica: "A ética foi respeitada? (0 = Não, 1 = Sim)",
-        btnSimular: "▶️ Simular",
-        btnVoz: "🎙️ Voz",
-        btnHistorico: "🧾 Histórico",
-        btnModo: "🌓 Modo",
-        btnIdioma: "🌐 EN",
-        erro: "⚠️ Por favor, preencha todos os campos corretamente.",
-        rejeitado: "🚨 Paciente não elegível para terapia regenerativa.",
-        iaRejeitado: "IA DALA.CTX: Recomendo cuidados paliativos personalizados. 🕊️",
-        violacao: "⚠️ A simulação foi interrompida por violação ética.",
-        iaViolacao: "IA DALA.CTX: O progresso sem ética é regressão. ⛔",
-        aprovado: "✅ Terapia CTX-Regenerativa aprovada com sucesso!",
-        iaAprovado: "IA DALA.CTX: Parâmetros seguros. Iniciando protocolo de restauração. 🌱✨",
-        resumo: "Resumo da Simulação"
-      },
-      en: {
-        titulo: "🧬 CTX‑REGENERATIVE – Bioethical Simulator",
-        lblIdade: "Patient's Age:",
-        lblDanos: "Cellular Damage Percentage (%):",
-        lblEtica: "Was ethics respected? (0 = No, 1 = Yes)",
-        btnSimular: "▶️ Simulate",
-        btnVoz: "🎙️ Voice",
-        btnHistorico: "🧾 History",
-        btnModo: "🌓 Mode",
-        btnIdioma: "🌐 PT",
-        erro: "⚠️ Please fill in all fields correctly.",
-        rejeitado: "🚨 Patient not eligible for regenerative therapy.",
-        iaRejeitado: "AI DALA.CTX: I recommend personalized palliative care. 🕊️",
-        violacao: "⚠️ Simulation blocked due to ethical violation.",
-        iaViolacao: "AI DALA.CTX: Progress without ethics is regression. ⛔",
-        aprovado: "✅ Regenerative CTX Therapy approved!",
-        iaAprovado: "AI DALA.CTX: Safe parameters. Initiating restoration protocol. 🌱✨",
-        resumo: "Simulation Summary"
-      }
-    };
-
-    function atualizarIdioma() {
-      const t = textos[idioma];
-      document.getElementById('titulo').innerText = t.titulo;
-      document.getElementById('lblIdade').innerText = t.lblIdade;
-      document.getElementById('lblDanos').innerText = t.lblDanos;
-      document.getElementById('lblEtica').innerText = t.lblEtica;
-      document.getElementById('btnSimular').innerText = t.btnSimular;
-      document.getElementById('btnVoz').innerText = t.btnVoz;
-      document.getElementById('btnHistorico').innerText = t.btnHistorico;
-      document.getElementById('btnModo').innerText = t.btnModo;
-      document.getElementById('btnIdioma').innerText = t.btnIdioma;
-    }
-
-    function alternarIdioma() {
-      idioma = idioma === 'pt' ? 'en' : 'pt';
-      atualizarIdioma();
-    }
-
-    function simular() {
-      const t = textos[idioma];
-      const idade = parseInt(document.getElementById("idade").value);
-      const danos = parseInt(document.getElementById("danos").value);
-      const etica = parseInt(document.getElementById("etica").value);
-
-      const resultadoDiv = document.getElementById("resultado");
-      const iaDiv = document.getElementById("iaTexto");
-
-      if (isNaN(idade) || isNaN(danos) || isNaN(etica)) {
-        resultadoDiv.innerText = t.erro;
-        iaDiv.innerText = "";
+      if (marcadores.length === 0) {
+        document.getElementById("resultado").innerHTML = "Por favor, selecione ao menos um marcador.";
         return;
       }
 
-      let resultado = "", iaTexto = "";
+      let resposta = "<strong>Resposta BioAI‑CTX com Lógica Afrokódica:</strong><br><br>";
 
-      if (danos > 70 || idade > 80) {
-        resultado = t.rejeitado;
-        iaTexto = t.iaRejeitado;
-      } else if (etica === 0) {
-        resultado = t.violacao;
-        iaTexto = t.iaViolacao;
-      } else {
-        resultado = t.aprovado;
-        iaTexto = t.iaAprovado;
+      if (marcadores.includes("IL-6") && marcadores.includes("TNF")) {
+        resposta += "🔥 A chama da inflamação está acesa. Caminhar sem equilíbrio pode ferir o corpo e o espírito.<br>";
       }
 
-      resultadoDiv.innerText = resultado;
-      iaDiv.innerText = iaTexto;
+      if (marcadores.includes("Cortisol")) {
+        resposta += "🌬️ O vento do estresse sopra forte. Respire. A sabedoria vem na pausa.<br>";
+      }
 
-      const historico = localStorage.getItem("historico") || "";
-      const novo = `${t.resumo}:\nIdade: ${idade}, Danos: ${danos}%, Ética: ${etica} → ${resultado}\n${iaTexto}\n---\n`;
-      localStorage.setItem("historico", historico + novo);
+      if (marcadores.includes("B12")) {
+        resposta += "🌍 Sinais de conexão com a terra. Força ancestral nutrindo o corpo.<br>";
+      }
+
+      if (marcadores.includes("Adrenalina")) {
+        resposta += "💧 Emoções em correnteza. Canalize para não afogar o tempo da cura.<br>";
+      }
+
+      if (marcadores.length >= 3) {
+        resposta += "⌛ Muitos sinais exigem sabedoria. Aguarde, analise, consulte tua ancestralidade antes de agir.<br>";
+      }
+
+      if (resposta === "<strong>Resposta BioAI‑CTX com Lógica Afrokódica:</strong><br><br>") {
+        resposta += "🌱 Os marcadores mostram serenidade. O corpo caminha em harmonia.";
+      }
+
+      document.getElementById("resultado").innerHTML = resposta;
     }
-
-    function mostrarHistorico() {
-      const div = document.getElementById("historico");
-      const hist = (localStorage.getItem("historico") || "").split("---");
-      div.innerHTML = hist.map((h, i) => `
-        <details>
-          <summary>🧾 ${idioma === 'pt' ? 'Simulação' : 'Simulation'} ${i + 1}</summary>
-          <pre>${h.trim()}</pre></details>
-  `).join('');
-}
-
-function alternarModo() {
-  document.body.classList.toggle("dark");
-}
-
-function iniciarVoz() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const reconhecimento = new SpeechRecognition();
-  reconhecimento.lang = idioma === "pt" ? "pt-PT" : "en-US";
-  reconhecimento.start();
-
-  reconhecimento.onresult = function(event) {
-    const texto = event.results[0][0].transcript;
-    alert((idioma === "pt" ? "Você disse: " : "You said: ") + texto);
-  }
-}
-
-atualizarIdioma();
-
-  </script>
-</body>
-</html>
+  </script></body>
+  </html>
